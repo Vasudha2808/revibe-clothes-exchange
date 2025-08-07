@@ -83,7 +83,7 @@ const Index = () => {
             Revibe
           </h1>
           <p className="text-2xl md:text-3xl text-white/90 mb-12 font-light">
-            Reimagine, Resell, Revive Your Clothes
+            Old Threads New Stories
           </p>
           
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
