@@ -7,28 +7,36 @@ import { ShoppingCart, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-// Sample products data
+// Sample products data with new categories and subcategories
 const products = [
-  { id: 1, name: "Vintage Denim Jacket", category: "Men", price: 1299, image: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400" },
-  { id: 2, name: "Floral Summer Dress", category: "Women", price: 899, image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400" },
-  { id: 3, name: "Kids Cotton T-Shirt", category: "Kids", price: 399, image: "https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=400" },
-  { id: 4, name: "Leather Handbag", category: "Accessories", price: 1599, image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400" },
-  { id: 5, name: "Running Sneakers", category: "Footwear", price: 1899, image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400" },
-  { id: 6, name: "Formal Blazer", category: "Men", price: 2199, image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400" },
-  { id: 7, name: "Casual Jeans", category: "Women", price: 1099, image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400" },
-  { id: 8, name: "School Backpack", category: "Kids", price: 799, image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400" },
+  { id: 1, name: "Silk Saree", category: "Women", subCategory: "Ethnic", price: 2299, image: "https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=400" },
+  { id: 2, name: "Kurta Set", category: "Men", subCategory: "Ethnic", price: 1899, image: "https://images.unsplash.com/photo-1566479945946-b063c6b2c4d5?w=400" },
+  { id: 3, name: "Business Suit", category: "Men", subCategory: "Formal", price: 4999, image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400" },
+  { id: 4, name: "Evening Gown", category: "Women", subCategory: "Formal", price: 3499, image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400" },
+  { id: 5, name: "Casual Jeans", category: "Women", subCategory: "Casual", price: 1299, image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400" },
+  { id: 6, name: "T-Shirt", category: "Men", subCategory: "Casual", price: 799, image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400" },
+  { id: 7, name: "Kids Lehenga", category: "Kids", subCategory: "Ethnic", price: 1599, image: "https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=400" },
+  { id: 8, name: "School Uniform", category: "Kids", subCategory: "Formal", price: 899, image: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400" },
+  { id: 9, name: "Kids Casual Wear", category: "Kids", subCategory: "Casual", price: 599, image: "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=400" },
+  { id: 10, name: "Anarkali Dress", category: "Women", subCategory: "Ethnic", price: 2799, image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400" },
+  { id: 11, name: "Formal Shirt", category: "Men", subCategory: "Formal", price: 1199, image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400" },
+  { id: 12, name: "Summer Dress", category: "Women", subCategory: "Casual", price: 999, image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400" },
 ];
 
-const categories = ["All", "Men", "Women", "Kids", "Accessories", "Footwear"];
+const categories = ["All", "Women", "Men", "Kids"];
+const subCategories = ["All", "Ethnic", "Formal", "Casual"];
 
 const Buy = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedSubCategory, setSelectedSubCategory] = useState("All");
   const [cart, setCart] = useState<number[]>([]);
 
-  const filteredProducts = selectedCategory === "All" 
-    ? products 
-    : products.filter(product => product.category === selectedCategory);
+  const filteredProducts = products.filter(product => {
+    const categoryMatch = selectedCategory === "All" || product.category === selectedCategory;
+    const subCategoryMatch = selectedSubCategory === "All" || product.subCategory === selectedSubCategory;
+    return categoryMatch && subCategoryMatch;
+  });
 
   const addToCart = (productId: number) => {
     setCart([...cart, productId]);
@@ -77,19 +85,40 @@ const Buy = () => {
       <div className="container mx-auto px-6 py-8">
         {/* Filter Section */}
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Filter by Category</h2>
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger className="w-48">
-              <SelectValue placeholder="Select category" />
-            </SelectTrigger>
-            <SelectContent>
-              {categories.map(category => (
-                <SelectItem key={category} value={category}>
-                  {category}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <h2 className="text-2xl font-bold mb-6">Shop by Style</h2>
+          <div className="flex flex-wrap gap-4">
+            <div className="flex flex-col">
+              <label className="text-sm font-medium mb-2">Category</label>
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-48">
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent className="bg-card border-border">
+                  {categories.map(category => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="flex flex-col">
+              <label className="text-sm font-medium mb-2">Style</label>
+              <Select value={selectedSubCategory} onValueChange={setSelectedSubCategory}>
+                <SelectTrigger className="w-48">
+                  <SelectValue placeholder="Select style" />
+                </SelectTrigger>
+                <SelectContent className="bg-card border-border">
+                  {subCategories.map(subCategory => (
+                    <SelectItem key={subCategory} value={subCategory}>
+                      {subCategory}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
         </div>
 
         {/* Products Grid */}
@@ -105,7 +134,10 @@ const Buy = () => {
                 <div className="p-4">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-semibold text-lg">{product.name}</h3>
-                    <Badge variant="secondary">{product.category}</Badge>
+                    <div className="flex gap-2">
+                      <Badge variant="secondary">{product.category}</Badge>
+                      <Badge variant="outline">{product.subCategory}</Badge>
+                    </div>
                   </div>
                   <p className="text-2xl font-bold text-primary">₹{product.price}</p>
                 </div>
